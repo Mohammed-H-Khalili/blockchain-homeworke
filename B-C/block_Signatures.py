@@ -47,7 +47,7 @@ def verify(message, sig, public):
         
 if __name__ == '__main__':
 
-    prK,puK = generate_keys()
+    pr,pu = generate_keys()
     message = b"This is a secret message"
     sig = sign(message, pr)
     

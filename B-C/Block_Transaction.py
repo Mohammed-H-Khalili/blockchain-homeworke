@@ -2,17 +2,17 @@
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 import block_Signatures
-import hashModule
+import numpy as np
 
 class Tran:
 
     sender = None
     reciver = None
     sig = None
-    puK = puK
+    puK = None
 
     def __init__(self,puK) :
-        self.puK = puK
+        self.puK = []
         self.sender = []
         self.reciver = []
         self.sig = []
@@ -23,17 +23,14 @@ class Tran:
     def add_reciver(self,to_address,quantity):
         self.reciver.append((to_address,quantity)) 
 
-    def SignTransaction(self):
+    def SignTransaction(self, private):
         message = self.__gather()
-        signature = block_Signatures.sig(message,self.puK)
-        self.sig.append(signature)       
-
+        signature = block_Signatures.sign(message,private)
+        self.sig.append(signature)
+    
     def __gather(self):
-        data = []
-        data.append(self.sender)
-        data.append(self.reciver)
-        data.append(self.puK)
-        return data
+        data = np.array([self.sender, self.reciver])
+        return data.tobytes()
 
     def validation(self):
         Input_balance = 0
@@ -57,7 +54,7 @@ class Tran:
                     found = True
             if not found:
                 return False
-        for address,quantity in self.outputs:
+        for address,quantity in self.reciver:
             if quantity < 0:
                 return False
             Output_balance = Output_balance + quantity
@@ -72,11 +69,13 @@ class Tran:
 if __name__ == "__main__":
     pr1 , pu1 = block_Signatures.generate_keys()
     pr2 , pu2 = block_Signatures.generate_keys()
-    Tran1 = Tran()
-    Tran1.add_input(pu1, 1)
-    Tran1.add_output(pu2, 1)
-    Tran1.sign(pr1)
-    if Tran1.is_valid():
+    Tran1 = Tran(pu1)
+    Tran1.add_sender(pu1, 1)
+    Tran1.add_reciver(pu2, 1)
+    Tran1.SignTransaction(private=pr1)
+    if Tran1.validation():
         print("Success! Tran is valid")
     else:
         print("ERROR! Tran is invalid")
+
+
