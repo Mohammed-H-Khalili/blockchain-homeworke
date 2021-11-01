@@ -19,6 +19,12 @@ class CBlock:
         digest.update(bytes(str(self.data),'utf8'))
         digest.update(bytes(str(self.previousHash),'utf8'))
         hash =digest.finalize()
+
+    def validation(self):
+        if self.previousBlock == None:
+            return True
+        return self.previousBlock.computeHash() == self.previousHash
+
 if __name__ == '__main__':
     root = CBlock('its block zero',None)
     B1 = CBlock('its block number 1', root)

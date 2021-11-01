@@ -8,13 +8,15 @@ from cryptography.hazmat.backends import default_backend
 
 class LedgerBlock (CBlock):
     def __init__(self,previousBlock):
-        hash = self.previousBlock
+        super (LedgerBlock,self).__init__([],previousBlock)
         
-    def AddToLedgerBlock (self):
-        pass
+    def AddToLedgerBlock (self,ledger_inputs):
+        self.data.append(ledger_inputs)
 
     def validation(self):
-        return False
+        if not super(LedgerBlock,self).validation():
+            return False
+        return True
 
 if __name__ == "__main__":
     pr2,pu2 = generate_keys()
