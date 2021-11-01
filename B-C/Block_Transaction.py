@@ -9,10 +9,10 @@ class Tran:
     sender = None
     reciver = None
     sig = None
-    puK = None
+    pu = None
 
-    def __init__(self,puK) :
-        self.puK = []
+    def __init__(self,pu) :
+        self.pu = []
         self.sender = []
         self.reciver = []
         self.sig = []
@@ -47,7 +47,7 @@ class Tran:
             if quantity < 0 :
                 return False
             Input_balance = Input_balance + quantity
-        for address in self.puK:
+        for address in self.pu:
             found = False
             for s in self.sig:
                 if block_Signatures.verify(message,S,address) :
@@ -66,16 +66,14 @@ class Tran:
         return True
 
 #In-Module Trial Transaction
-if __name__ == "__main__":
-    pr1 , pu1 = block_Signatures.generate_keys()
-    pr2 , pu2 = block_Signatures.generate_keys()
-    Tran1 = Tran(pu1)
-    Tran1.add_sender(pu1, 1)
-    Tran1.add_reciver(pu2, 1)
-    Tran1.SignTransaction(private=pr1)
-    if Tran1.validation():
-        print("Success! Tran is valid")
-    else:
-        print("ERROR! Tran is invalid")
-
-
+#if __name__ == "__main__":
+#pr1 , pu1 = block_Signatures.generate_keys()
+#pr2 , pu2 = block_Signatures.generate_keys()
+#Tran1 = Tran(pu1)
+#Tran1.add_sender(pu1, 1)
+#Tran1.add_reciver(pu2, 1)
+#Tran1.SignTransaction(private=pr1)
+#if Tran1.validation():
+#    print("Success! Transaction is valid")
+#else:
+#    print("ERROR! Transaction is invalid")

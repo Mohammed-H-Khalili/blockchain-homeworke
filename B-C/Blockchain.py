@@ -9,7 +9,6 @@ class someClass:
 class CBlock:
     data = None
     previousHash = None
-    previousHash =  None
     def __init__(self,data,previousBlock):
         self.data = data
         self.previousBlock = previousBlock
